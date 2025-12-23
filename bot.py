@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# bot.py - Main bot server for Spaceman Scam (Cloud Ready)
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ← BARIS INI
 
 import json
 import sqlite3
@@ -15,7 +17,7 @@ import random
 import os
 
 # Import configuration
-import setting
+import setting  # ← Ini akan bekerja setelah sys.path.append
 
 # Setup logging
 logging.basicConfig(
